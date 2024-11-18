@@ -165,6 +165,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "Python features dynamic typing, interpreted nature, and a large standard library.\n"
             "Example: print('Hello, World!')"
         )
+    elif "Hello" in user_text:
+        response = (
+            "Hello, I'm a simple Python bot that responds to basic greetings and basic programming questions."
+        )
     elif "python" in user_text:
          response = (
             "Python is a high-level, interpreted, general-purpose programming language.\n"
@@ -202,11 +206,20 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "The 'for' loop is used to iterate over a sequence (like a list or string).\n"
             "Example: for item in ['apple', 'banana', 'cherry']: print(item)"
         )
+    elif "thanks" in user_text:
+        response = (
+        "You're welcome! 😊 If you have any more questions or run into any issues, feel fre.\n"
+        )
     elif "loop" in user_text:
         response = (
             "Looping in Python is done using the 'for' loop or the 'while' loop.\n"
             "The 'for' loop is used to iterate over a sequence (like a list or string).\n"
             "Example: for item in ['apple', 'banana', 'cherry']: print(item)"
+        )
+    elif "function" in user_text:
+        response = (
+            "A function is a block of code that performs a specific task.\n"
+            "Functions can be reused, making the code more modular and easier to manage.\n"
         )
     else:
         response = "I didn't quite get that. Could you please clarify?"
