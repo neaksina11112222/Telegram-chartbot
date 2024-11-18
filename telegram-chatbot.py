@@ -7,7 +7,6 @@ from datetime import datetime
 import pytz
 from googleapiclient.discovery import build
 from spellchecker import SpellChecker
-
 # Bot Token
 TOKEN = '7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU'
 
@@ -109,7 +108,7 @@ async def youtube_search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     await update.message.reply_text(message if message else "No results found.")
 
-# /setresponse command: Set a custom response for a user
+
 async def set_response(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = str(update.message.from_user.id)
     custom_response = ' '.join(context.args)
@@ -136,7 +135,6 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         "/define <word> - Get the definition of a word"
     )
 
-# Handle regular messages
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # Normalize user input
     user_text = update.message.text.strip().lower()  # Trim whitespace and convert to lowercase
@@ -144,15 +142,18 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     # Respond based on keywords
     if "What does html stand for?" in user_text:
         response = (
-            "Hyper text makeup language.\n"
-            "good ides."
+            "Hyper text makeup language."
+        )
+    elif "What does CSS stand for?" in user_text:
+        response = (
+            "Cascading style sheet\n"
         )
     elif "what is html" in user_text:
         response = (
             "HTML (HyperText Markup Language) is a standard markup language used for creating web pages.\n"
             "It defines the structure and content of a web document."
-            # "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
-            # "Example: <h1>This is a heading</h1>"
+            "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
+            "Example: <h1>This is a heading</h1>"
         )
     elif "what is python?" in user_text:
         response = (
@@ -161,12 +162,98 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "Python features dynamic typing, interpreted nature, and a large standard library.\n"
             "Example: print('Hello, World!')"
         )
+    elif "html" in user_text:
+        response = (
+            "HTML (HyperText Markup Language) is a standard markup language used for creating web pages.\n"
+            "It defines the structure and content of a web document.\n"
+            "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
+            "Example: <h1>This is a heading</h1>"
+        )
+    elif "what is python?" in user_text:
+         response = (
+            "Python is a high-level, interpreted, general-purpose programming language.\n"
+            "It was created by Guido van Rossum in 1991.\n"
+            "Python features dynamic typing, interpreted nature, and a large standard library.\n"
+            "Example: print('Hello, World!')"
+        )
+    elif "python" in user_text:
+         response = (
+            "Python is a high-level, interpreted, general-purpose programming language.\n"
+            "It was created by Guido van Rossum in 1991.\n"
+            "Python features dynamic typing, interpreted nature, and a large standard library.\n"
+            "Example: print('Hello, World!')"
+        )
+    elif "how to use a dictionary" in user_text:
+        response = (
+            "A dictionary is a data structure that stores key-value pairs.\n"
+            "Keys are used to access and retrieve values.\n"
+            "Example: {'name': 'John', 'age': 30}"
+        )
+    elif "dictionary" in user_text:
+        response = (
+            "A dictionary is a data structure that stores key-value pairs.\n"
+            "Keys are used to access and retrieve values.\n"
+            "Example: {'name': 'John', 'age': 30}"
+        )
+    elif "how to use a list" in user_text:
+        response = (
+            "A list is an ordered collection of items.\n"
+            "Items in a list can be of different data types.\n"
+            "Example: ['apple', 'banana', 'cherry']"
+        )
+    elif "list" in user_text:
+        response = (
+            "A list is an ordered collection of items.\n"
+            "Items in a list can be of different data types.\n"
+            "Example: ['apple', 'banana', 'cherry']"
+        )
+    elif "how to use loop in python" in user_text:
+        response = (
+            "Looping in Python is done using the 'for' loop or the 'while' loop.\n"
+            "The 'for' loop is used to iterate over a sequence (like a list or string).\n"
+            "Example: for item in ['apple', 'banana', 'cherry']: print(item)"
+        )
+    elif "loop" in user_text:
+        response = (
+            "Looping in Python is done using the 'for' loop or the 'while' loop.\n"
+            "The 'for' loop is used to iterate over a sequence (like a list or string).\n"
+            "Example: for item in ['apple', 'banana', 'cherry']: print(item)"
+        )
+    elif "what is mean of html?" in user_text:
+        response = (
+            "HTML is the standard markup language for creating Web pages.\n"
+            "HTML describes the structure of a Web page.\n"
+            "HTML elements tell the browser how to display the content."
+        )
+    elif "mean" in user_text:
+        response = (
+            "HTML is the standard markup language for creating Web pages.\n"
+            "HTML describes the structure of a Web page.\n"
+            "HTML elements tell the browser how to display the content."
+        )
+    elif "what does html stand for?" in user_text:
+        response = (
+            "Stand for hyper text makeup language."
+        )
+    elif "stand" in user_text:
+        response = (
+            "Stand for hyper text makeup language."
+        )
+    elif "What is an HTML element?" in user_text:
+        response = (
+            "An HTML element is defined by a start tag, some content, and an end tag."
+            "Example : <tagname> Content goes here... </tagname>"
+        )
+    elif "element" in user_text:
+        response = (
+            "An HTML element is defined by a start tag, some content, and an end tag."
+            "Example : <tagname> Content goes here... </tagname>"
+        )
     else:
         response = "I didn't quite get that. Could you please clarify?"
 
     # Send the response
     await update.message.reply_text(response)
-
 # --- Inline Button Handlers --- #
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
