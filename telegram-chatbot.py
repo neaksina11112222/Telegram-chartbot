@@ -140,14 +140,13 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_text = update.message.text.lower()
 
-    if "how to reduce stress?" in user_text:
+    if "What does HTML stand for?" in user_text:
         response = (
-            "To reduce stress, try the following techniques:\n"
-            "- Practice deep breathing exercises.\n"
-            "- Engage in physical activities like walking or yoga.\n"
-            "- Take short breaks and relax.\n"
-            "- Make time for hobbies you enjoy.\n"
-            "Let me know if you want more tips!"
+            "Hyper text makeup language\n"
+        )
+    elif "What does CSS stand for?" in user_text:
+        response = (
+            "Cascading style sheet\n"
         )
     else:
         response = "I didn't quite get that. Could you please clarify?"
