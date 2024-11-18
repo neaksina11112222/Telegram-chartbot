@@ -139,10 +139,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     # Normalize user input
     user_text = update.message.text.strip().lower()  # Trim whitespace and convert to lowercase
 
-    # Respond based on keywords
-    if "how to reduce stress" in user_text:
+    if "What does HTML stand for?" in user_text:
         response = (
-            "sleep"
+            "Hyper text makeup language\n"
+        )
+    elif "What does CSS stand for?" in user_text:
+        response = (
+            "Cascading style sheet\n"
         )
     elif "what is html" in user_text:
         response = (
