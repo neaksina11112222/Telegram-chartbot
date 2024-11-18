@@ -9,7 +9,7 @@ from googleapiclient.discovery import build
 from spellchecker import SpellChecker
 
 # Bot Token
-TOKEN = '7635474576:AAFc4wC9CUGX9_01RQ13rOwsQI243SZR580'
+TOKEN = '7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU'
 
 # Initialize SpellChecker for word corrections
 spell = SpellChecker()
@@ -147,6 +147,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     elif "What does CSS stand for?" in user_text:
         response = (
             "Cascading style sheet\n"
+        )
+    elif "What is HTML?" in user_text:
+        response = (
+            "HTML (HyperText Markup Language) is a standard markup language used for creating web pages.\n"
+            "It defines the structure and content of a web document.\n"
+            "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
+            "Example: <h1>This is a heading</h1>"
         )
     else:
         response = "I didn't quite get that. Could you please clarify?"
