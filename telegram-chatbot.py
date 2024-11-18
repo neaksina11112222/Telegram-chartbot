@@ -138,26 +138,33 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 # Handle regular messages
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    user_text = update.message.text.lower()
+    # Normalize user input
+    user_text = update.message.text.strip().lower()  # Trim whitespace and convert to lowercase
 
-    if "What does HTML stand for?" in user_text:
+    # Respond based on keywords
+    if "What does html stand for?" in user_text:
         response = (
-            "Hyper text makeup language\n"
+            "Hyper text makeup language.\n"
+            "good ides."
         )
-    elif "What does CSS stand for?" in user_text:
-        response = (
-            "Cascading style sheet\n"
-        )
-    elif "What is HTML?" in user_text:
+    elif "what is html" in user_text:
         response = (
             "HTML (HyperText Markup Language) is a standard markup language used for creating web pages.\n"
-            "It defines the structure and content of a web document.\n"
-            "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
-            "Example: <h1>This is a heading</h1>"
+            "It defines the structure and content of a web document."
+            # "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
+            # "Example: <h1>This is a heading</h1>"
+        )
+    elif "what is python?" in user_text:
+        response = (
+            "Python is a high-level, interpreted, general-purpose programming language.\n"
+            "It was created by Guido van Rossum in 1991.\n"
+            "Python features dynamic typing, interpreted nature, and a large standard library.\n"
+            "Example: print('Hello, World!')"
         )
     else:
         response = "I didn't quite get that. Could you please clarify?"
-    
+
+    # Send the response
     await update.message.reply_text(response)
 
 # --- Inline Button Handlers --- #
