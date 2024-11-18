@@ -7,7 +7,6 @@ from datetime import datetime
 import pytz
 from googleapiclient.discovery import build
 from spellchecker import SpellChecker
-
 # Bot Token
 TOKEN = '7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU'
 
@@ -136,31 +135,84 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         "/define <word> - Get the definition of a word"
     )
 
-# Handle regular messages
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    user_text = update.message.text.lower()
+    # Normalize user input
+    user_text = update.message.text.strip().lower()  # Trim whitespace and convert to lowercase
 
-    if "how to reduce stress?" in user_text:
+    # Respond based on keywords
+    if "how to reduce stress" in user_text:
         response = (
-            "To reduce stress, try the following techniques:\n"
-            "- Practice deep breathing exercises.\n"
-            "- Engage in physical activities like walking or yoga.\n"
-            "- Take short breaks and relax.\n"
-            "- Make time for hobbies you enjoy.\n"
-            "Let me know if you want more tips!"
+            "sleep"
         )
-    elif "What is HTML?" in user_text:
+    elif "what is html" in user_text:
         response = (
             "HTML (HyperText Markup Language) is a standard markup language used for creating web pages.\n"
             "It defines the structure and content of a web document.\n"
             "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
             "Example: <h1>This is a heading</h1>"
         )
+    elif "html" in user_text:
+        response = (
+            "HTML (HyperText Markup Language) is a standard markup language used for creating web pages.\n"
+            "It defines the structure and content of a web document.\n"
+            "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
+            "Example: <h1>This is a heading</h1>"
+        )
+    elif "what is python?" in user_text:
+         response = (
+            "Python is a high-level, interpreted, general-purpose programming language.\n"
+            "It was created by Guido van Rossum in 1991.\n"
+            "Python features dynamic typing, interpreted nature, and a large standard library.\n"
+            "Example: print('Hello, World!')"
+        )
+    elif "python" in user_text:
+         response = (
+            "Python is a high-level, interpreted, general-purpose programming language.\n"
+            "It was created by Guido van Rossum in 1991.\n"
+            "Python features dynamic typing, interpreted nature, and a large standard library.\n"
+            "Example: print('Hello, World!')"
+        )
+    elif "how to use a dictionary" in user_text:
+        response = (
+            "A dictionary is a data structure that stores key-value pairs.\n"
+            "Keys are used to access and retrieve values.\n"
+            "Example: {'name': 'John', 'age': 30}"
+        )
+    elif "dictionary" in user_text:
+        response = (
+            "A dictionary is a data structure that stores key-value pairs.\n"
+            "Keys are used to access and retrieve values.\n"
+            "Example: {'name': 'John', 'age': 30}"
+        )
+    elif "how to use a list" in user_text:
+        response = (
+            "A list is an ordered collection of items.\n"
+            "Items in a list can be of different data types.\n"
+            "Example: ['apple', 'banana', 'cherry']"
+        )
+    elif "list" in user_text:
+        response = (
+            "A list is an ordered collection of items.\n"
+            "Items in a list can be of different data types.\n"
+            "Example: ['apple', 'banana', 'cherry']"
+        )
+    elif "how to use loop in python" in user_text:
+        response = (
+            "Looping in Python is done using the 'for' loop or the 'while' loop.\n"
+            "The 'for' loop is used to iterate over a sequence (like a list or string).\n"
+            "Example: for item in ['apple', 'banana', 'cherry']: print(item)"
+        )
+    elif "loop" in user_text:
+        response = (
+            "Looping in Python is done using the 'for' loop or the 'while' loop.\n"
+            "The 'for' loop is used to iterate over a sequence (like a list or string).\n"
+            "Example: for item in ['apple', 'banana', 'cherry']: print(item)"
+        )
     else:
         response = "I didn't quite get that. Could you please clarify?"
-    
-    await update.message.reply_text(response)
 
+    # Send the response
+    await update.message.reply_text(response)
 # --- Inline Button Handlers --- #
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
