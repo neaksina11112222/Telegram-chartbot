@@ -149,6 +149,12 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "- Make time for hobbies you enjoy.\n"
             "Let me know if you want more tips!"
         )
+    elif "what is css?" in user_text:
+        response = (
+            "CSS (CSS stands for Cascading Style Sheets) describes how HTML elements are displayed on screen, paper, or in other media.\n"
+            "CSS saves a lot of work. It can control the layout of multiple web pages all at once.\n"
+            "External stylesheets are stored in CSS files."
+        )  
     else:
         response = "I didn't quite get that. Could you please clarify?"
     
