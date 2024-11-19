@@ -108,7 +108,7 @@ async def youtube_search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     await update.message.reply_text(message if message else "No results found.")
 
-# /setresponse command: Set a custom response for a user
+
 async def set_response(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = str(update.message.from_user.id)
     custom_response = ' '.join(context.args)
@@ -139,9 +139,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     # Normalize user input
     user_text = update.message.text.strip().lower()  # Trim whitespace and convert to lowercase
 
-    if "What does HTML stand for?" in user_text:
+    # Respond based on keywords
+    if "What does html stand for?" in user_text:
         response = (
-            "Hyper text makeup language\n"
+            "Hyper text makeup language."
         )
     elif "What does CSS stand for?" in user_text:
         response = (
@@ -150,9 +151,16 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     elif "what is html" in user_text:
         response = (
             "HTML (HyperText Markup Language) is a standard markup language used for creating web pages.\n"
-            "It defines the structure and content of a web document.\n"
+            "It defines the structure and content of a web document."
             "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
             "Example: <h1>This is a heading</h1>"
+        )
+    elif "what is python?" in user_text:
+        response = (
+            "Python is a high-level, interpreted, general-purpose programming language.\n"
+            "It was created by Guido van Rossum in 1991.\n"
+            "Python features dynamic typing, interpreted nature, and a large standard library.\n"
+            "Example: print('Hello, World!')"
         )
     elif "html" in user_text:
         response = (
@@ -223,6 +231,36 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         response = (
             "A function is a block of code that performs a specific task.\n"
             "Functions can be reused, making the code more modular and easier to manage.\n"
+        )
+    elif "what is mean of html?" in user_text:
+        response = (
+            "HTML is the standard markup language for creating Web pages.\n"
+            "HTML describes the structure of a Web page.\n"
+            "HTML elements tell the browser how to display the content."
+        )
+    elif "mean" in user_text:
+        response = (
+            "HTML is the standard markup language for creating Web pages.\n"
+            "HTML describes the structure of a Web page.\n"
+            "HTML elements tell the browser how to display the content."
+        )
+    elif "what does html stand for?" in user_text:
+        response = (
+            "Stand for hyper text makeup language."
+        )
+    elif "stand" in user_text:
+        response = (
+            "Stand for hyper text makeup language."
+        )
+    elif "What is an HTML element?" in user_text:
+        response = (
+            "An HTML element is defined by a start tag, some content, and an end tag."
+            "Example : <tagname> Content goes here... </tagname>"
+        )
+    elif "element" in user_text:
+        response = (
+            "An HTML element is defined by a start tag, some content, and an end tag."
+            "Example : <tagname> Content goes here... </tagname>"
         )
     else:
         response = "I didn't quite get that. Could you please clarify?"
