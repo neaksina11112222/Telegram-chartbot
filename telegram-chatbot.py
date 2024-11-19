@@ -273,7 +273,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         response = (
             "HTML is used to provide structure to a webpage and make it accessible to users of the internet through text, visual formatting and search factors."
         )
-    elif "used" in user_text:
+    elif "why used it?" in user_text:
         response = (
             "HTML is used to provide structure to a webpage and make it accessible to users of the internet through text, visual formatting and search factors."
         )
@@ -284,6 +284,191 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     elif "url" in user_text:
         response = (
             "URL : Uniform Resource Locator."
+        )
+    elif "What is Underlist?" in user_text:
+        response = (
+            "Unordered List: The <ul> tag is used to create an unordered list, where the order of the items doesn't matter, it renders bulleted items. Each item in the list is represented by the <li> (list item) tag.\n"
+            "The list items will be marked with bullets (small black circles) by default:\n"
+            "disc:	Sets the list item marker to a bullet (default).\n"
+            "circle:	Sets the list item marker to a circle\n"
+            "square:	Sets the list item marker to a square\n"
+            "none:	The list items will not be marked"
+        )
+    elif "under" in user_text:
+        response = (
+            "Unordered List: The <ul> tag is used to create an unordered list, where the order of the items doesn't matter, it renders bulleted items. Each item in the list is represented by the <li> (list item) tag.\n"
+            "The list items will be marked with bullets (small black circles) by default:\n"
+            "disc:	Sets the list item marker to a bullet (default).\n"
+            "circle:	Sets the list item marker to a circle\n"
+            "square:	Sets the list item marker to a square\n"
+            "none:	The list items will not be marked"
+        )
+    elif "what is css?" in user_text:
+        response = (
+            "CSS (CSS stands for Cascading Style Sheets) describes how HTML elements are displayed on screen, paper, or in other media.\n"
+            "CSS saves a lot of work. It can control the layout of multiple web pages all at once.\n"
+            "External stylesheets are stored in CSS files."
+        ) 
+    elif "css?" in user_text:
+        response = (
+            "CSS (CSS stands for Cascading Style Sheets) describes how HTML elements are displayed on screen, paper, or in other media.\n"
+            "CSS saves a lot of work. It can control the layout of multiple web pages all at once.\n"
+            "External stylesheets are stored in CSS files."
+        ) 
+    elif "types of selectors" in user_text:
+        response = (
+            "1. Universal Selector (*) : This selector is used to select all elements on the page.\n"
+            "2. Type Selector : This selects all elements of a specific type (tag name).\n"
+            "3. Class Selector : This selects elements with a specific class.\n"
+            "4. ID Selector : This selects a single element with a specific ID.\n"
+            "5. Attribute Selector : This selects elements with a specific attribute.\n"
+            "6. Pseudo-class Selector : This selects elements in a specific state.\n"
+            "7. Pseudo-element Selector : This styles a specific part of an element.\n"
+            "8. Descendant Selector : This selects all elements inside another element.\n"
+            "9. Child Selector : This selects direct children of an element.\n"
+            "10. Adjacent Sibling Selector : This selects an element that is immediately after another element.\n"
+            "11. General Sibling Selector : This selects all elements that are siblings after another element."
+        )    
+    elif "what is box model in css?" in user_text or "box model in css" in user_text:
+        response = (
+            "Border: property defines a boundary around an element, separating the content area from the surrounding space (including padding and margin). It is placed between the padding and margin.\n"
+            "Margin: property defines the space outside the border of an element, pushing the element away from other surrounding elements. It is the outermost area of the box model.\n"
+            "Padding: property defines the space inside the border of an element, between the border and the content. It pushes the content away from the border.\n"
+            "Content: content of the box, where text and images appear."
+        )    
+    elif "what is text color?" in user_text:
+        response = (
+            "The text color property is used to set the color of the text. The color is specified."
+        )    
+    elif "how many font types in css?" in user_text or "font types in css" in user_text:
+        response = (
+            "Serif fonts: have a small stroke at the edges of each letter. They create a sense of formality and elegance.\n"
+            "Sans-serif fonts: have clean lines (no small strokes attached). They create a modern and minimalistic look.\n"
+            "Monospace fonts: here all the letters have the same fixed width. They create a mechanical look.\n"
+            "Cursive fonts imitate human handwriting.\n"
+            "Fantasy fonts are decorative/playful fonts."
+        )    
+    elif "how to add icon in css?" in user_text or "add icon in css" in user_text:
+        response = (
+            "The simplest way to add an icon to your HTML page, is with an icon library, such as Font Awesome. Add the name of the specified icon class to any inline HTML element (like <i> or <span>). All the icons in the icon libraries below, are scalable vectors that can be customized with CSS (size, color, shadow, etc.)\n"
+            "To use the Font Awesome icons, go to fontawesome.com, sign in, and get a code to add in the <head> section of your HTML page."
+        )    
+    elif "list style in css?" in user_text or "what is list style in css?" in user_text:
+        response = (
+            "Unordered Lists: The list items are marked with bullets.\n"
+            "Ordered Lists: The list items are marked with numbers or letters."
+        )                
+    elif "what is sass?" in user_text:
+        response = (
+            "Sass stands for Syntactically Awesome Stylesheets.\n"
+            "Sass is an extension to CSS.\n"
+            "Sass is a CSS pre-processor.\n"
+            "Sass is completely compatible with all versions of CSS.\n"
+            "Sass reduces repetition of CSS and therefore saves time.\n"
+            "Sass was designed by Hampton Catlin and developed by Natalie Weizenbaum in 2006.\n"
+            "Sass is free to download and use."
+        )         
+    elif "why use sass?" in user_text:
+        response = (
+            "Stylesheets are getting larger, more complex, and harder to maintain. This is where a CSS pre-processor can help.\n"
+            "Sass lets you use features that do not exist in CSS, like variables, nested rules, mixins, imports, inheritance, built-in functions, and other stuff."
+        )         
+    elif "how does sass work?" in user_text:
+        response = (
+            "A browser does not understand Sass code. Therefore, you will need a Sass pre-processor to convert Sass code into standard CSS.\n"
+            "This process is called. So, you need to give a transpiler (some kind of program) some Sass code and then get some CSS code back."
+        )   
+    elif "sass file type?" in user_text:
+        response = (
+            "Sass files have the .scss file extension."
+        )
+    elif "Sass string Functions?" in user_text or "string" in user_text:
+        response = (
+            "The string functions are used to manipulate and get information about strings.\n"
+            "Sass strings are 1-based. The first character in a string is at index 1, not 0.\n"
+            "The following table lists all string functions in Sass"
+        )
+    elif "The position property?" in user_text or "position" in user_text:
+        response = (
+            "The string functions are used to manipulate and get information about strings.\n"
+            "The position property specifies the type of positioning method used for an element (static, relative, fixed, absolute or sticky).\n"          
+            "The position property specifies the type of positioning method used for an element.\n"
+            "There are five different position values:\n"   
+            "static\n"
+            "relative\n"
+            "fixed\n"
+            "absolute\n"
+            "sticky\n"
+        )
+    elif "z-index Property?" in user_text or "z-index" in user_text:
+        response = (
+            "The z-index property specifies the stack order of an element.\n"
+            "When elements are positioned, they can overlap other elements.\n"          
+            "The z-index property specifies the stack order of an element (which element should be placed in front of, or behind, the others).\n"
+            "Example : \n"   
+            "img {\n"
+            " position: absolute;\n"
+            "left: 0px;\n"
+            "top: 0px;\n"
+            "z-index: -1;\n"
+            "}\n"
+        )
+    elif "what is overflow?" in user_text:
+        response = (
+            "The CSS overflow property controls what happens to content that is too big to fit into an area.\n"
+            "Example : overflow: scroll;\n"
+            "The overflow property has the following values :/n"
+            "visible - Default. The overflow is not clipped. The content renders outside the element's box\n"
+            "hidden - The overflow is clipped, and the rest of the content will be invisible\n"
+            "scroll - The overflow is clipped, and a scrollbar is added to see the rest of the content\n"
+            "auto - Similar to scroll, but it adds scrollbars only when necessary"
+        )
+    elif "what is inline-block" in user_text:
+        response = (
+            "1,Compared to display: inline, the major difference is that display: inline-block allows to set a width and height on the element.\n"
+    "2,Also, with display: inline-block, the top and bottom margins/paddings are respected, but with display: inline they are not.\n"
+            "3,Compared to display: block, the major difference is that display: inline-block does not add a line-break after the element, so the element can sit next to other elements./n"
+            "4,The following example shows the different behavior of display: inline, display: inline-block and display: block"
+        )
+    elif "flex property?" in user_text or "what is flex Property?" in user_text:
+        response = (
+            "flex-grow\n"
+            "flex basis\n"
+            "flex-shrink\n"
+        )
+    elif "flex-wrap?" in user_text or "what is flex-wrap?" in user_text:
+        response = (
+            "The flex-wrap property specifies whether the flexible items should wrap or not.\n"
+            "Note: If the elements are not flexible items, the flex-wrap property has no effect.\n"
+        )
+    elif "grid property?" in user_text or "what is grid property?" in user_text:
+        response = (
+            "The grid property is a shorthand property for:\n"
+            "1. grid-template-rows\n"
+            "2. grid-template-columns\n"
+            "3. grid-template-areas\n"
+            "4. grid-auto-rows\n"
+            "5. grid-auto-columns\n"
+            "6. grid-auto-flow"
+        )
+    elif "Box sizing?" in user_text or "what is box Sizing?" in user_text:
+        response = (
+            "The CSS box-sizing property allows us to include the padding and border in an element's total width and height.\n"
+        )
+    elif "box-shadow?" in user_text or "what is box-shadow?" in user_text:
+        response = (
+            "The box-shadow property attaches one or more shadows to an element.\n"
+        )
+    elif "flex-direction?" in user_text or "what is flex-direction?" in user_text:
+        response = (
+            "The flex-direction property specifies the direction of the flexible items.\n"
+            "Note: If the element is not a flexible item, the flex-direction property has no effect.\n"
+        )
+    elif "width property?" in user_text or "what is width property?" in user_text:
+        response = (
+            "The width property sets the width of an element.\n"
+            "The width of an element does not include padding, borders, or margins!\n"
+            "Note: The min-width and max-width properties override the width property.\n"
         )
     else:
         response = "I didn't quite get that. Could you please clarify?"
