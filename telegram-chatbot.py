@@ -1,6 +1,6 @@
 from tracemalloc import start
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler, CallbackContext
 import requests
 import json
 import os
@@ -316,7 +316,7 @@ def main():
     application.add_handler(CommandHandler("youtube", youtube_search))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(CallbackQueryHandler(button_handler))
-    updater = Updater("7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU") # type: ignore
+    updater = updater("7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU") # type: ignore
 
     # Add command handler
     updater.dispatcher.add_handler(CommandHandler("define", definition_command))
