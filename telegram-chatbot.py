@@ -249,6 +249,42 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "An HTML element is defined by a start tag, some content, and an end tag."
             "Example : <tagname> Content goes here... </tagname>"
         )
+    elif "What are the 10 basic HTML tags?" in user_text:
+        response = (
+            "<html> … </html> — The root element."
+            "<head> … </head> — The document head."
+            "<title> … </title> — The page title."
+            "<body> … </body> — The page's content."
+            "<h1> … </h1> — A section heading."
+            "<a> … </a> — A link"
+            "<img> — An image."
+        )
+    elif "10 basic" in user_text:
+        response = (
+            "<html> … </html> — The root element.\n"
+            "<head> … </head> — The document head.\n"
+            "<title> … </title> — The page title.\n"
+            "<body> … </body> — The page's content.\n"
+            "<h1> … </h1> — A section heading.\n"
+            "<a> … </a> — A link.\n"
+            "<img> — An image."
+        )
+    elif "Why is HTML used?" in user_text:
+        response = (
+            "HTML is used to provide structure to a webpage and make it accessible to users of the internet through text, visual formatting and search factors."
+        )
+    elif "used" in user_text:
+        response = (
+            "HTML is used to provide structure to a webpage and make it accessible to users of the internet through text, visual formatting and search factors."
+        )
+    elif "What is a url in HTML?" in user_text:
+        response = (
+            "URL - Uniform Resource Locator"
+        )
+    elif "url" in user_text:
+        response = (
+            "URL : Uniform Resource Locator."
+        )
     else:
         response = "I didn't quite get that. Could you please clarify?"
 
