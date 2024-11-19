@@ -1,3 +1,4 @@
+from tracemalloc import start
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
 import requests
@@ -35,26 +36,44 @@ def save_prefs(prefs):
     with open(PREFS_FILE, 'w') as file:
         json.dump(prefs, file)
 
+
+
 def get_definition(word):
     """Fetch definition of a word using an API and suggest corrections."""
     corrected_word = spell.correction(word)
     correction_msg = f"Did you mean '{corrected_word}'?" if corrected_word != word else ""
 
     url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{corrected_word}"
-    response = requests.get(url)
-
-    if response.status_code == 200:
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an HTTPError for bad responses
         data = response.json()
-        meaning = data[0]['meanings'][0]['definitions'][0]['definition']
-        part_of_speech = data[0]['meanings'][0].get('partOfSpeech', 'No part of speech available.')
-        example = data[0]['meanings'][0]['definitions'][0].get('example', 'No example available.')
-        
-        return f"**Word**: {corrected_word.capitalize()}\n" \
-               f"**Part of Speech**: {part_of_speech.capitalize()}\n" \
-               f"**Definition**: {meaning}\n" \
-               f"**Example**: {example}\n" + correction_msg
-    else:
-        return f"Sorry, I couldn't find the definition for '{word}'. {correction_msg}"
+
+        if data and 'meanings' in data[0]:
+            meaning = data[0]['meanings'][0]['definitions'][0]['definition']
+            part_of_speech = data[0]['meanings'][0].get('partOfSpeech', 'No part of speech available.')
+            example = data[0]['meanings'][0]['definitions'][0].get('example', 'No example available.')
+
+            return f"**Word**: {corrected_word.capitalize()}\n" \
+                   f"**Part of Speech**: {part_of_speech.capitalize()}\n" \
+                   f"**Definition**: {meaning}\n" \
+                   f"**Example**: {example}\n" + (f"\n{correction_msg}" if correction_msg else "")
+        else:
+            return f"Sorry, I couldn't find detailed information for '{corrected_word}'. {correction_msg}"
+    except requests.exceptions.RequestException as e:
+        return f"An error occurred while fetching the definition: {str(e)}"
+
+# Command handler for the bot
+def definition_command(update: Update, context: CallbackContext) -> None: # type: ignore
+    # Get the word from the user's message
+    word = ' '.join(context.args)
+    if not word:
+        update.message.reply_text("Please provide a word to look up.")
+        return
+    
+    # Fetch the definition
+    result = get_definition(word)
+    update.message.reply_text(result)
 
 # --- Command Handlers --- #
 
@@ -176,6 +195,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "Python features dynamic typing, interpreted nature, and a large standard library.\n"
             "Example: print('Hello, World!')"
         )
+    elif "Hello" in user_text:
+        response = (
+            "Hello, I'm a simple Python bot that responds to basic greetings and basic programming questions."
+        )
     elif "python" in user_text:
          response = (
             "Python is a high-level, interpreted, general-purpose programming language.\n"
@@ -213,11 +236,20 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "The 'for' loop is used to iterate over a sequence (like a list or string).\n"
             "Example: for item in ['apple', 'banana', 'cherry']: print(item)"
         )
+    elif "thanks" in user_text:
+        response = (
+        "You're welcome! 😊 If you have any more questions or run into any issues, feel fre.\n"
+        )
     elif "loop" in user_text:
         response = (
             "Looping in Python is done using the 'for' loop or the 'while' loop.\n"
             "The 'for' loop is used to iterate over a sequence (like a list or string).\n"
             "Example: for item in ['apple', 'banana', 'cherry']: print(item)"
+        )
+    elif "function" in user_text:
+        response = (
+            "A function is a block of code that performs a specific task.\n"
+            "Functions can be reused, making the code more modular and easier to manage.\n"
         )
     elif "what is mean of html?" in user_text:
         response = (
@@ -490,17 +522,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 # --- Start Command --- #
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    keyboard = [
-        [InlineKeyboardButton("Weather", callback_data='weather')],
-        [InlineKeyboardButton("YouTube Search", callback_data='youtube')],
-        [InlineKeyboardButton("Date/Time", callback_data='datetime')],
-        [InlineKeyboardButton("Dictionary", callback_data='define')]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text("Please choose an option:", reply_markup=reply_markup)
-
-# --- Main Function --- #
 
 def main():
     """Main entry point for the bot."""
@@ -516,6 +537,14 @@ def main():
     application.add_handler(CommandHandler("youtube", youtube_search))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(CallbackQueryHandler(button_handler))
+    updater = Updater("7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU") # type: ignore
+
+    # Add command handler
+    updater.dispatcher.add_handler(CommandHandler("define", definition_command))
+
+    # Start the bot
+    updater.start_polling()
+    updater.idle()
 
     # Start polling for updates
     application.run_polling()
