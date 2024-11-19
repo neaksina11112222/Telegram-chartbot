@@ -1,3 +1,4 @@
+from tracemalloc import start
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
 import requests
@@ -35,26 +36,44 @@ def save_prefs(prefs):
     with open(PREFS_FILE, 'w') as file:
         json.dump(prefs, file)
 
+
+
 def get_definition(word):
     """Fetch definition of a word using an API and suggest corrections."""
     corrected_word = spell.correction(word)
     correction_msg = f"Did you mean '{corrected_word}'?" if corrected_word != word else ""
 
     url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{corrected_word}"
-    response = requests.get(url)
-
-    if response.status_code == 200:
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an HTTPError for bad responses
         data = response.json()
-        meaning = data[0]['meanings'][0]['definitions'][0]['definition']
-        part_of_speech = data[0]['meanings'][0].get('partOfSpeech', 'No part of speech available.')
-        example = data[0]['meanings'][0]['definitions'][0].get('example', 'No example available.')
-        
-        return f"**Word**: {corrected_word.capitalize()}\n" \
-               f"**Part of Speech**: {part_of_speech.capitalize()}\n" \
-               f"**Definition**: {meaning}\n" \
-               f"**Example**: {example}\n" + correction_msg
-    else:
-        return f"Sorry, I couldn't find the definition for '{word}'. {correction_msg}"
+
+        if data and 'meanings' in data[0]:
+            meaning = data[0]['meanings'][0]['definitions'][0]['definition']
+            part_of_speech = data[0]['meanings'][0].get('partOfSpeech', 'No part of speech available.')
+            example = data[0]['meanings'][0]['definitions'][0].get('example', 'No example available.')
+
+            return f"**Word**: {corrected_word.capitalize()}\n" \
+                   f"**Part of Speech**: {part_of_speech.capitalize()}\n" \
+                   f"**Definition**: {meaning}\n" \
+                   f"**Example**: {example}\n" + (f"\n{correction_msg}" if correction_msg else "")
+        else:
+            return f"Sorry, I couldn't find detailed information for '{corrected_word}'. {correction_msg}"
+    except requests.exceptions.RequestException as e:
+        return f"An error occurred while fetching the definition: {str(e)}"
+
+# Command handler for the bot
+def definition_command(update: Update, context: CallbackContext) -> None: # type: ignore
+    # Get the word from the user's message
+    word = ' '.join(context.args)
+    if not word:
+        update.message.reply_text("Please provide a word to look up.")
+        return
+    
+    # Fetch the definition
+    result = get_definition(word)
+    update.message.reply_text(result)
 
 # --- Command Handlers --- #
 
@@ -108,7 +127,7 @@ async def youtube_search(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     await update.message.reply_text(message if message else "No results found.")
 
-# /setresponse command: Set a custom response for a user
+
 async def set_response(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_id = str(update.message.from_user.id)
     custom_response = ' '.join(context.args)
@@ -140,16 +159,27 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     user_text = update.message.text.strip().lower()  # Trim whitespace and convert to lowercase
 
     # Respond based on keywords
-    if "how to reduce stress" in user_text:
+    if "What does html stand for?" in user_text:
         response = (
-            "sleep"
+            "Hyper text makeup language."
+        )
+    elif "What does CSS stand for?" in user_text:
+        response = (
+            "Cascading style sheet\n"
         )
     elif "what is html" in user_text:
         response = (
             "HTML (HyperText Markup Language) is a standard markup language used for creating web pages.\n"
-            "It defines the structure and content of a web document.\n"
+            "It defines the structure and content of a web document."
             "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
             "Example: <h1>This is a heading</h1>"
+        )
+    elif "what is python?" in user_text:
+        response = (
+            "Python is a high-level, interpreted, general-purpose programming language.\n"
+            "It was created by Guido van Rossum in 1991.\n"
+            "Python features dynamic typing, interpreted nature, and a large standard library.\n"
+            "Example: print('Hello, World!')"
         )
     elif "html" in user_text:
         response = (
@@ -221,6 +251,36 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "A function is a block of code that performs a specific task.\n"
             "Functions can be reused, making the code more modular and easier to manage.\n"
         )
+    elif "what is mean of html?" in user_text:
+        response = (
+            "HTML is the standard markup language for creating Web pages.\n"
+            "HTML describes the structure of a Web page.\n"
+            "HTML elements tell the browser how to display the content."
+        )
+    elif "mean" in user_text:
+        response = (
+            "HTML is the standard markup language for creating Web pages.\n"
+            "HTML describes the structure of a Web page.\n"
+            "HTML elements tell the browser how to display the content."
+        )
+    elif "what does html stand for?" in user_text:
+        response = (
+            "Stand for hyper text makeup language."
+        )
+    elif "stand" in user_text:
+        response = (
+            "Stand for hyper text makeup language."
+        )
+    elif "What is an HTML element?" in user_text:
+        response = (
+            "An HTML element is defined by a start tag, some content, and an end tag."
+            "Example : <tagname> Content goes here... </tagname>"
+        )
+    elif "element" in user_text:
+        response = (
+            "An HTML element is defined by a start tag, some content, and an end tag."
+            "Example : <tagname> Content goes here... </tagname>"
+        )
     else:
         response = "I didn't quite get that. Could you please clarify?"
 
@@ -241,17 +301,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
 # --- Start Command --- #
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    keyboard = [
-        [InlineKeyboardButton("Weather", callback_data='weather')],
-        [InlineKeyboardButton("YouTube Search", callback_data='youtube')],
-        [InlineKeyboardButton("Date/Time", callback_data='datetime')],
-        [InlineKeyboardButton("Dictionary", callback_data='define')]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text("Please choose an option:", reply_markup=reply_markup)
-
-# --- Main Function --- #
 
 def main():
     """Main entry point for the bot."""
@@ -267,6 +316,14 @@ def main():
     application.add_handler(CommandHandler("youtube", youtube_search))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(CallbackQueryHandler(button_handler))
+    updater = Updater("7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU") # type: ignore
+
+    # Add command handler
+    updater.dispatcher.add_handler(CommandHandler("define", definition_command))
+
+    # Start the bot
+    updater.start_polling()
+    updater.idle()
 
     # Start polling for updates
     application.run_polling()
