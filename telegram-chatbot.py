@@ -8,7 +8,9 @@ from datetime import datetime
 import pytz
 from googleapiclient.discovery import build
 from spellchecker import SpellChecker
+from telegram import Update
 
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 # Bot Token
 TOKEN = '7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU'
 
@@ -22,6 +24,39 @@ PREFS_FILE = 'user_prefs.json'
 YOUTUBE_API_KEY = 'AIzaSyDQSRsLtPIru--EJIg9MtX2eMjOxuvuddM'
 WEATHER_API_KEY = '7f59948b973042e8bfd22815241211'
 
+
+API_URL = "https://api.stackexchange.com/2.3/search/advanced"
+# Function to search Stack Overflow 
+# Function to fetch results from Stack Overflow
+def search_stackoverflow(query):
+    API_URL = "https://api.stackexchange.com/2.3/search/advanced"
+    params = {
+        "q": query,
+        "site": "stackoverflow",
+        "sort": "relevance",
+        "order": "desc"
+    }
+    response = requests.get(API_URL, params=params)
+    return response.json().get("items", [])
+
+# Telegram bot command
+async def search_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = " ".join(context.args)
+    if not query:
+        await update.message.reply_text("Please provide a search query.")
+        return
+
+    results = search_stackoverflow(query)
+    if not results:
+        await update.message.reply_text("No results found.")
+        return
+
+    # Format and send top 5 results
+    message = "\n\n".join(
+        f"**{item['title']}**\n[View Question]({item['link']})"
+        for item in results[:5]
+    )
+    await update.message.reply_text(message, parse_mode="Markdown")
 
 # --- Helper Functions --- #
 
@@ -455,7 +490,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "HTML describes the structure of a Web page.\n"
             "HTML elements tell the browser how to display the content."
         )
-        
     elif "mean" in user_text:
         response = (
             "HTML is the standard markup language for creating Web pages.\n"
@@ -503,6 +537,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     elif "Why is HTML used?" in user_text:
         response = (
             "HTML is used to provide structure to a webpage and make it accessible to users of the internet through text, visual formatting and search factors."
+        )
+    elif "install Py" in user_text:
+        response = (
+            "To install Python, visit [python.org](https://www.python.org/downloads/)"
         )
     elif "used" in user_text:
         response = (
@@ -563,7 +601,9 @@ def main():
     application.add_handler(CommandHandler("youtube", youtube_search))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_handler(CommandHandler("search", search_command))
 
+   
     # Start polling for updates
     application.run_polling()
 
