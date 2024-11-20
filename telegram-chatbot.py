@@ -140,20 +140,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     user_text = update.message.text.strip().lower()  # Trim whitespace and convert to lowercase
 
     # Respond based on keywords
-    if "What does html stand for?" in user_text:
+    if "what does html stand for?" in user_text:
         response = (
             "Hyper text makeup language."
         )
-    elif "What does CSS stand for?" in user_text:
+    elif "what does CSS stand for?" in user_text:
         response = (
-            "Cascading style sheet\n"
-        )
-    elif "what is html" in user_text:
-        response = (
-            "HTML (HyperText Markup Language) is a standard markup language used for creating web pages.\n"
-            "It defines the structure and content of a web document."
-            "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
-            "Example: <h1>This is a heading</h1>"
+            "Cascading style sheet."
         )
     elif "what is python?" in user_text:
         response = (
@@ -161,13 +154,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "It was created by Guido van Rossum in 1991.\n"
             "Python features dynamic typing, interpreted nature, and a large standard library.\n"
             "Example: print('Hello, World!')"
-        )
-    elif "html" in user_text:
-        response = (
-            "HTML (HyperText Markup Language) is a standard markup language used for creating web pages.\n"
-            "It defines the structure and content of a web document.\n"
-            "HTML tags are used to define different elements, such as headings, paragraphs, images, and links.\n"
-            "Example: <h1>This is a heading</h1>"
         )
     elif "what is python?" in user_text:
          response = (
@@ -219,13 +205,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "The 'for' loop is used to iterate over a sequence (like a list or string).\n"
             "Example: for item in ['apple', 'banana', 'cherry']: print(item)"
         )
+#Ask about HTML...
+
     elif "what is mean of html?" in user_text:
-        response = (
-            "HTML is the standard markup language for creating Web pages.\n"
-            "HTML describes the structure of a Web page.\n"
-            "HTML elements tell the browser how to display the content."
-        )
-    elif "mean" in user_text:
         response = (
             "HTML is the standard markup language for creating Web pages.\n"
             "HTML describes the structure of a Web page.\n"
@@ -233,33 +215,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         )
     elif "what does html stand for?" in user_text:
         response = (
-            "Stand for hyper text makeup language."
+            "Stand for: hyper text makeup language."
         )
-    elif "stand" in user_text:
+    elif "what is an html element?" in user_text:
         response = (
-            "Stand for hyper text makeup language."
-        )
-    elif "What is an HTML element?" in user_text:
-        response = (
-            "An HTML element is defined by a start tag, some content, and an end tag."
+            "An HTML element is defined by a start tag, some content, and an end tag.\n"
             "Example : <tagname> Content goes here... </tagname>"
         )
-    elif "element" in user_text:
-        response = (
-            "An HTML element is defined by a start tag, some content, and an end tag."
-            "Example : <tagname> Content goes here... </tagname>"
-        )
-    elif "What are the 10 basic HTML tags?" in user_text:
-        response = (
-            "<html> … </html> — The root element."
-            "<head> … </head> — The document head."
-            "<title> … </title> — The page title."
-            "<body> … </body> — The page's content."
-            "<h1> … </h1> — A section heading."
-            "<a> … </a> — A link"
-            "<img> — An image."
-        )
-    elif "10 basic" in user_text:
+    elif "what are the 10 basic html tags?" in user_text:
         response = (
             "<html> … </html> — The root element.\n"
             "<head> … </head> — The document head.\n"
@@ -269,40 +232,31 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "<a> … </a> — A link.\n"
             "<img> — An image."
         )
-    elif "Why is HTML used?" in user_text:
+    elif "why is html used?" in user_text:
         response = (
             "HTML is used to provide structure to a webpage and make it accessible to users of the internet through text, visual formatting and search factors."
         )
-    elif "why used it?" in user_text:
-        response = (
-            "HTML is used to provide structure to a webpage and make it accessible to users of the internet through text, visual formatting and search factors."
-        )
-    elif "What is a url in HTML?" in user_text:
+    elif "what is a url in HTML?" in user_text:
         response = (
             "URL - Uniform Resource Locator"
         )
-    elif "url" in user_text:
+    elif "what is class? " in user_text:
         response = (
-            "URL : Uniform Resource Locator."
+            "The HTML class attribute is used to specify a class for an HTML element.\n"
+            "Multiple HTML elements can share the same class."
         )
-    elif "What is Underlist?" in user_text:
+    elif "what is id?" in user_text:
         response = (
-            "Unordered List: The <ul> tag is used to create an unordered list, where the order of the items doesn't matter, it renders bulleted items. Each item in the list is represented by the <li> (list item) tag.\n"
-            "The list items will be marked with bullets (small black circles) by default:\n"
-            "disc:	Sets the list item marker to a bullet (default).\n"
-            "circle:	Sets the list item marker to a circle\n"
-            "square:	Sets the list item marker to a square\n"
-            "none:	The list items will not be marked"
+            "The HTML id attribute is used to specify a unique id for an HTML element.\n"
+            "You cannot have more than one element with the same id in an HTML document."
         )
-    elif "under" in user_text:
+    elif "who made html?" in user_text:
         response = (
-            "Unordered List: The <ul> tag is used to create an unordered list, where the order of the items doesn't matter, it renders bulleted items. Each item in the list is represented by the <li> (list item) tag.\n"
-            "The list items will be marked with bullets (small black circles) by default:\n"
-            "disc:	Sets the list item marker to a bullet (default).\n"
-            "circle:	Sets the list item marker to a circle\n"
-            "square:	Sets the list item marker to a square\n"
-            "none:	The list items will not be marked"
+            "The first version of HTML was written by Tim Berners-Lee in 1993. Since then, there have been many different versions of HTML. The most widely used version throughout the 2000's was HTML 4.01, which became an official standard in December 1999."
         )
+
+#Ask about CSS...
+
     elif "what is css?" in user_text:
         response = (
             "CSS (CSS stands for Cascading Style Sheets) describes how HTML elements are displayed on screen, paper, or in other media.\n"
