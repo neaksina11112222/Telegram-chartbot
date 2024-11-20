@@ -8,6 +8,9 @@ from datetime import datetime
 import pytz
 from googleapiclient.discovery import build
 from spellchecker import SpellChecker
+from telegram import Update
+
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 # Bot Token
 TOKEN = '7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU'
 
@@ -22,6 +25,39 @@ YOUTUBE_API_KEY = 'AIzaSyDQSRsLtPIru--EJIg9MtX2eMjOxuvuddM'
 WEATHER_API_KEY = '7f59948b973042e8bfd22815241211'
 
 
+API_URL = "https://api.stackexchange.com/2.3/search/advanced"
+# Function to search Stack Overflow 
+# Function to fetch results from Stack Overflow
+def search_stackoverflow(query):
+    API_URL = "https://api.stackexchange.com/2.3/search/advanced"
+    params = {
+        "q": query,
+        "site": "stackoverflow",
+        "sort": "relevance",
+        "order": "desc"
+    }
+    response = requests.get(API_URL, params=params)
+    return response.json().get("items", [])
+
+# Telegram bot command
+async def search_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = " ".join(context.args)
+    if not query:
+        await update.message.reply_text("Please provide a search query.")
+        return
+
+    results = search_stackoverflow(query)
+    if not results:
+        await update.message.reply_text("No results found.")
+        return
+
+    # Format and send top 5 results
+    message = "\n\n".join(
+        f"**{item['title']}**\n[View Question]({item['link']})"
+        for item in results[:5]
+    )
+    await update.message.reply_text(message, parse_mode="Markdown")
+
 # --- Helper Functions --- #
 
 def load_prefs():
@@ -35,7 +71,6 @@ def save_prefs(prefs):
     """Save user preferences to the file."""
     with open(PREFS_FILE, 'w') as file:
         json.dump(prefs, file)
-        
 
 
 
@@ -201,7 +236,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "Hello, I'm a simple Python bot that responds to basic greetings and basic programming questions."
         )
     elif "python" in user_text:
-         response = (
+        response = (
             "Python is a high-level, interpreted, general-purpose programming language.\n"
             "It was created by Guido van Rossum in 1991.\n"
             "Python features dynamic typing, interpreted nature, and a large standard library.\n"
@@ -282,6 +317,46 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "An HTML element is defined by a start tag, some content, and an end tag."
             "Example : <tagname> Content goes here... </tagname>"
         )
+    elif "What are the 10 basic HTML tags?" in user_text:
+        response = (
+            "<html> … </html> — The root element."
+            "<head> … </head> — The document head."
+            "<title> … </title> — The page title."
+            "<body> … </body> — The page's content."
+            "<h1> … </h1> — A section heading."
+            "<a> … </a> — A link"
+            "<img> — An image."
+        )
+    elif "10 basic" in user_text:
+        response = (
+            "<html> … </html> — The root element.\n"
+            "<head> … </head> — The document head.\n"
+            "<title> … </title> — The page title.\n"
+            "<body> … </body> — The page's content.\n"
+            "<h1> … </h1> — A section heading.\n"
+            "<a> … </a> — A link.\n"
+            "<img> — An image."
+        )
+    elif "Why is HTML used?" in user_text:
+        response = (
+            "HTML is used to provide structure to a webpage and make it accessible to users of the internet through text, visual formatting and search factors."
+        )
+    elif "install Py" in user_text:
+        response = (
+            "To install Python, visit [python.org](https://www.python.org/downloads/)"
+        )
+    elif "used" in user_text:
+        response = (
+            "HTML is used to provide structure to a webpage and make it accessible to users of the internet through text, visual formatting and search factors."
+        )
+    elif "What is a url in HTML?" in user_text:
+        response = (
+            "URL - Uniform Resource Locator"
+        )
+    elif "url" in user_text:
+        response = (
+            "URL : Uniform Resource Locator."
+        )
     else:
         response = "I didn't quite get that. Could you please clarify?"
 
@@ -303,9 +378,21 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 # --- Start Command --- #
 
 
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    keyboard = [
+        [InlineKeyboardButton("Weather", callback_data='weather')],
+        [InlineKeyboardButton("YouTube Search", callback_data='youtube')],
+        [InlineKeyboardButton("Date/Time", callback_data='datetime')],
+        [InlineKeyboardButton("Dictionary", callback_data='define')]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text("Please choose an option:", reply_markup=reply_markup)
+
+# --- Main Function --- #
+
 def main():
     """Main entry point for the bot."""
-    application = ApplicationBuilder().token(TOKEN).build()
+    application = ApplicationBuilder().token("7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU").build()
 
     # Add command handlers
     application.add_handler(CommandHandler("start", start))
@@ -317,15 +404,10 @@ def main():
     application.add_handler(CommandHandler("youtube", youtube_search))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(CallbackQueryHandler(button_handler))
-    updater = updater("7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU") # type: ignore
+    application.add_handler(CommandHandler("search", search_command))
 
-    # Add command handler
-    updater.dispatcher.add_handler(CommandHandler("define", definition_command))
-
-    # Start the bot
-    updater.start_polling()
-    updater.idle()
-
+   
+   
     # Start polling for updates
     application.run_polling()
 
