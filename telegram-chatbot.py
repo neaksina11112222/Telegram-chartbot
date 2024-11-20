@@ -35,6 +35,7 @@ def save_prefs(prefs):
     """Save user preferences to the file."""
     with open(PREFS_FILE, 'w') as file:
         json.dump(prefs, file)
+        
 
 
 
