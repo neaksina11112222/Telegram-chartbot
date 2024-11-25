@@ -9,10 +9,15 @@ import pytz
 from googleapiclient.discovery import build
 from spellchecker import SpellChecker
 from telegram import Update
-
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import CallbackQueryHandler, CommandHandler, Updater
+import requests
 # Bot Token
 TOKEN = '7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU'
+
+NEWS_API_KEY = 'ab09193031d14b7b9ed5a0f3e0e34047'
+NEWS_URL = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={NEWS_API_KEY}"
 
 # Initialize SpellChecker for word corrections
 spell = SpellChecker()
@@ -181,13 +186,13 @@ async def set_response(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(
         "Commands:\n"
-        "/start - Greet the user\n"
-        "/help - Show help\n"
-        "/weather - Get weather data\n"
-        "/setresponse <response> - Set custom response\n"
-        "/datetime - Get the current date and time in Cambodia\n"
-        "/youtube <search term> - Search YouTube for videos\n"
-        "/define <word> - Get the definition of a word"
+        "/start - 👋 Greet the user\n"
+        "/help - ❓ Show help\n"
+        "/weather - 🌦️ Get weather data\n"
+        "/setresponse <response> - 📝 Set custom response\n"
+        "/datetime - 🕒 Get the current date and time in Cambodia\n"
+        "/youtube <search term> - 🎥 Search YouTube for videos\n"
+        "/define <word> - 📖 Get the definition of a word"
     )
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -531,32 +536,69 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     # Send the response
     await update.message.reply_text(response)
 # --- Inline Button Handlers --- #
-
-async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    query = update.callback_query
-    await query.answer()
-    action = {
-        'weather': "Please type /weather <city> to get the weather.",
-        'youtube': "Please type /youtube <search term> to search YouTube.",
-        'datetime': "Please type /datetime to get the current date and time in Cambodia."
-    }.get(query.data, "Unknown option selected.")
-    
-    await query.edit_message_text(action)
-
-# --- Start Command --- #
-
-
+ 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = [
-        [InlineKeyboardButton("Weather", callback_data='weather')],
-        [InlineKeyboardButton("YouTube Search", callback_data='youtube')],
-        [InlineKeyboardButton("Date/Time", callback_data='datetime')],
-        [InlineKeyboardButton("Dictionary", callback_data='define')]
+        [InlineKeyboardButton("🌦️ Weather", callback_data='weather')],  # Weather icon
+        [InlineKeyboardButton("🎥 YouTube Search", callback_data='youtube')],  # YouTube icon
+        [InlineKeyboardButton("🕒 Date/Time", callback_data='datetime')],  # Date/Time icon
+        [InlineKeyboardButton("📖 Dictionary", callback_data='define')],  # Dictionary icon
+        [InlineKeyboardButton("🔍 Web Search", callback_data='web_search')],  # Web Search icon
+        [InlineKeyboardButton("📰 News Search", callback_data='news_search')],  # News icon
+        
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.message.reply_text("Please choose an option:", reply_markup=reply_markup)
 
+# Button Handler to maintain menu after interaction
+async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Handle button clicks."""
+    query = update.callback_query
+    await query.answer()
+
+    if query.data == 'weather':
+        await query.edit_message_text("🌦️ Weather Command:\nType `/weather <city>` to get the weather.")
+    elif query.data == 'youtube':
+        await query.edit_message_text("🎥 YouTube Search:\nType `/youtube <search term>` to search videos.")
+    elif query.data == 'datetime':
+        await query.edit_message_text("🕒 Date/Time Command:\nType `/datetime` to get the current date and time.")
+    elif query.data == 'define':
+        await query.edit_message_text("📖 Dictionary Command:\nType `/define <word>` to get the definition of a word.")
+    elif query.data == 'web_search':
+        await query.edit_message_text("🔍 Web Search:\nType `/search <query>` to search the web.")
+    elif query.data == 'news_search':
+        news_message = await get_latest_news()
+        await query.edit_message_text(text=news_message, parse_mode="Markdown", disable_web_page_preview=True)
+    else:
+        await query.edit_message_text("❌ Unknown Command!")
+
+
+async def get_latest_news() -> str:
+    """Fetch the latest news using NewsAPI."""
+    try:
+        response = requests.get(NEWS_URL)
+        if response.status_code == 200:
+            articles = response.json().get('articles', [])
+            if not articles:
+                return "📰 No news articles found at the moment."
+            
+            news_message = "📰 *Latest News:*\n\n"
+            for article in articles[:5]:  # Show top 5 news articles
+                title = article.get('title', 'No Title')
+                url = article.get('url', '#')
+                news_message += f"• [{title}]({url})\n"
+            return news_message
+        else:
+            return "⚠️ Failed to fetch news. Please try again later."
+    except Exception as e:
+        return f"⚠️ An error occurred: {e}"
+
+
 # --- Main Function --- #
+
+
+# --- Main Function --- #
+
 def main():
     """Main entry point for the bot."""
     application = ApplicationBuilder().token("7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU").build()
@@ -570,10 +612,9 @@ def main():
     application.add_handler(CommandHandler("define", define))
     application.add_handler(CommandHandler("youtube", youtube_search))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-    application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_handler(CallbackQueryHandler(button_handler)) 
+     # Ensure button_handler is active
     application.add_handler(CommandHandler("search", search_command))
-
-   
 
     # Start polling for updates
     application.run_polling()
