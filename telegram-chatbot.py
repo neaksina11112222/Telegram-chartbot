@@ -14,7 +14,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackQueryHandler, CommandHandler, Updater
 import requests
 # Bot Token
-TOKEN = '7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU'
+TOKEN = '7538570779:AAGAUW7ZTTEtuUaE-0pmJqgSbOfDQMFKfKI'
 
 NEWS_API_KEY = 'ab09193031d14b7b9ed5a0f3e0e34047'
 NEWS_URL = f"https://newsapi.org/v2/top-headlines?country=us&apiKey={NEWS_API_KEY}"
@@ -119,7 +119,7 @@ def definition_command(update: Update, context: CallbackContext) -> None: # type
 # --- Command Handlers --- #
 
 # /define command: Fetch word definition
-async def define(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def definition(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     word = ' '.join(context.args)
     if word:
         definition = get_definition(word)
@@ -192,7 +192,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         "/setresponse <response> - 📝 Set custom response\n"
         "/datetime - 🕒 Get the current date and time in Cambodia\n"
         "/youtube <search term> - 🎥 Search YouTube for videos\n"
-        "/define <word> - 📖 Get the definition of a word"
+        "/definition <word> - 📖 Get the definition of a word"
     )
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -235,7 +235,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "CSS saves a lot of work. It can control the layout of multiple web pages all at once.\n"
             "External stylesheets are stored in CSS files."
         ) 
-    elif "css?" in user_text:
+    elif "css" in user_text:
         response = (
             "CSS (CSS stands for Cascading Style Sheets) describes how HTML elements are displayed on screen, paper, or in other media.\n"
             "CSS saves a lot of work. It can control the layout of multiple web pages all at once.\n"
@@ -255,7 +255,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "10. Adjacent Sibling Selector : This selects an element that is immediately after another element.\n"
             "11. General Sibling Selector : This selects all elements that are siblings after another element."
         )    
-    elif "what is box model in css?" in user_text or "box model in css" in user_text:
+    elif "box model" in user_text or "box model in css" in user_text:
         response = (
             "Border: property defines a boundary around an element, separating the content area from the surrounding space (including padding and margin). It is placed between the padding and margin.\n"
             "Margin: property defines the space outside the border of an element, pushing the element away from other surrounding elements. It is the outermost area of the box model.\n"
@@ -266,7 +266,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         response = (
             "The text color property is used to set the color of the text. The color is specified."
         )    
-    elif "how many font types in css?" in user_text or "font types in css" in user_text:
+    elif "text color" in user_text:
+        response = (
+            "The text color property is used to set the color of the text. The color is specified."
+        )    
+    elif "font type" in user_text or "font types in css" in user_text:
         response = (
             "Serif fonts: have a small stroke at the edges of each letter. They create a sense of formality and elegance.\n"
             "Sans-serif fonts: have clean lines (no small strokes attached). They create a modern and minimalistic look.\n"
@@ -274,12 +278,20 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "Cursive fonts imitate human handwriting.\n"
             "Fantasy fonts are decorative/playful fonts."
         )    
-    elif "how to add icon in css?" in user_text or "add icon in css" in user_text:
+    elif "font" in user_text or "font types in css" in user_text:
+        response = (
+            "Serif fonts: have a small stroke at the edges of each letter. They create a sense of formality and elegance.\n"
+            "Sans-serif fonts: have clean lines (no small strokes attached). They create a modern and minimalistic look.\n"
+            "Monospace fonts: here all the letters have the same fixed width. They create a mechanical look.\n"
+            "Cursive fonts imitate human handwriting.\n"
+            "Fantasy fonts are decorative/playful fonts."
+        )    
+    elif "how to add icon in css?" in user_text or "how to add icon" in user_text:
         response = (
             "The simplest way to add an icon to your HTML page, is with an icon library, such as Font Awesome. Add the name of the specified icon class to any inline HTML element (like <i> or <span>). All the icons in the icon libraries below, are scalable vectors that can be customized with CSS (size, color, shadow, etc.)\n"
             "To use the Font Awesome icons, go to fontawesome.com, sign in, and get a code to add in the <head> section of your HTML page."
         )    
-    elif "list style in css?" in user_text or "what is list style in css?" in user_text:
+    elif "list style" in user_text or "what is list style in css?" in user_text:
         response = (
             "Unordered Lists: The list items are marked with bullets.\n"
             "Ordered Lists: The list items are marked with numbers or letters."
@@ -339,7 +351,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "z-index: -1;\n"
             "}\n"
         )
-    elif "what is overflow?" in user_text:
+    elif "what is overflow?" in user_text or "overflow" in user_text:
         response = (
             "The CSS overflow property controls what happens to content that is too big to fit into an area.\n"
             "Example : overflow: scroll;\n"
@@ -349,25 +361,25 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             "scroll - The overflow is clipped, and a scrollbar is added to see the rest of the content\n"
             "auto - Similar to scroll, but it adds scrollbars only when necessary"
         )
-    elif "what is inline-block" in user_text:
+    elif "what is inline-block" in user_text or "inline-block" in user_text:
         response = (
             "1,Compared to display: inline, the major difference is that display: inline-block allows to set a width and height on the element.\n"
             "2,Also, with display: inline-block, the top and bottom margins/paddings are respected, but with display: inline they are not.\n"
             "3,Compared to display: block, the major difference is that display: inline-block does not add a line-break after the element, so the element can sit next to other elements./n"
             "4,The following example shows the different behavior of display: inline, display: inline-block and display: block"
         )
-    elif "flex property?" in user_text or "what is flex Property?" in user_text:
+    elif "flex property" in user_text or "what is flex Property?" in user_text:
         response = (
             "flex-grow\n"
             "flex basis\n"
             "flex-shrink\n"
         )
-    elif "flex-wrap?" in user_text or "what is flex-wrap?" in user_text:
+    elif "flex wrap" in user_text or "what is flex-wrap?" in user_text:
         response = (
             "The flex-wrap property specifies whether the flexible items should wrap or not.\n"
             "Note: If the elements are not flexible items, the flex-wrap property has no effect.\n"
         )
-    elif "grid property?" in user_text or "what is grid property?" in user_text:
+    elif "grid property" in user_text or "what is grid property?" in user_text:
         response = (
             "The grid property is a shorthand property for:\n"
             "1. grid-template-rows\n"
@@ -381,16 +393,16 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         response = (
             "The CSS box-sizing property allows us to include the padding and border in an element's total width and height.\n"
         )
-    elif "box-shadow?" in user_text or "what is box-shadow?" in user_text:
+    elif "box-shadow" in user_text or "what is box-shadow?" in user_text:
         response = (
             "The box-shadow property attaches one or more shadows to an element.\n"
         )
-    elif "flex-direction?" in user_text or "what is flex-direction?" in user_text:
+    elif "flex-direction" in user_text or "what is flex-direction?" in user_text:
         response = (
             "The flex-direction property specifies the direction of the flexible items.\n"
             "Note: If the element is not a flexible item, the flex-direction property has no effect.\n"
         )
-    elif "width property?" in user_text or "what is width property?" in user_text:
+    elif "width property" in user_text or "what is width property?" in user_text:
         response = (
             "The width property sets the width of an element.\n"
             "The width of an element does not include padding, borders, or margins!\n"
@@ -514,7 +526,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         response = (
             "HTML is used to provide structure to a webpage and make it accessible to users of the internet through text, visual formatting and search factors."
         )
-    elif "install Py" in user_text:
+    elif " how to install Py" in user_text or "install" in user_text:
         response = (
             "To install Python, visit [python.org](https://www.python.org/downloads/)"
         )
@@ -530,6 +542,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         response = (
             "URL : Uniform Resource Locator."
         )
+    elif "hello" in user_text:
+        response = "Hello! I'm a Python-powered Telegram chatbot that can help you with various tasks related to programming, HTML, and Python."
     else:
         response = "I didn't quite get that. Could you please clarify?"
 
@@ -601,7 +615,7 @@ async def get_latest_news() -> str:
 
 def main():
     """Main entry point for the bot."""
-    application = ApplicationBuilder().token("7316188795:AAEi0o-hFR8jv9uZqcbPYpYpdyCnVmWqoOU").build()
+    application = ApplicationBuilder().token("7538570779:AAGAUW7ZTTEtuUaE-0pmJqgSbOfDQMFKfKI").build()
 
     # Add command handlers
     application.add_handler(CommandHandler("start", start))
@@ -609,13 +623,13 @@ def main():
     application.add_handler(CommandHandler("weather", weather))
     application.add_handler(CommandHandler("datetime", datetime_command))
     application.add_handler(CommandHandler("setresponse", set_response))
-    application.add_handler(CommandHandler("define", define))
+    application.add_handler(CommandHandler("definition", definition))
     application.add_handler(CommandHandler("youtube", youtube_search))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(CallbackQueryHandler(button_handler)) 
      # Ensure button_handler is active
     application.add_handler(CommandHandler("search", search_command))
-
+    
     # Start polling for updates
     application.run_polling()
 
